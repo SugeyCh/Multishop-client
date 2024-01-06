@@ -1,0 +1,59 @@
+.body{
+  min-height: 90vh;
+}
+
+header{ margin: 1rem 2rem 0 1.5rem; }
+
+.logo{
+  width: 9.5rem;
+  height: 4.5rem;
+}
+
+main{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-content: center;
+  width: 100%;
+}
+
+.user{
+  width: 13rem;
+  height: 13rem;
+  margin: 28px 0 38px 0;
+}
+
+form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 19rem;
+}
+
+input:focus{ color: rgba(0, 0, 0, 0.6); }
+
+footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+span{
+  font-size: 1.4rem;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+  margin-right: 0.3rem;
+}
+
+.footer{
+  width: 8rem;
+  height: 3.4rem;
+  margin-top: 5px;
+}
