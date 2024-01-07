@@ -8,6 +8,7 @@ import toast, {Toaster} from 'react-hot-toast'
 import { useRouter }    from 'next/router'
 import { useDispatch }  from 'react-redux'
 import { loginUser }    from '@r/slicers/authsSlicer'
+import { setCookie }    from '@g/cookie'
 
 export default function Login() {
   const [redirect, setRedirect] = useState(false)
@@ -34,6 +35,9 @@ export default function Login() {
       let res = await postLogin(newuser)
       if (res?.data && res?.data?.Status === 'Autenticación exitosa') {
         notifySucces('Inicio de Sesión exitoso')
+        
+        setCookie('token', res?.data?.token)
+        
         dispatch(loginUser({ 
           username: res?.data?.usuario?.nombre, 
           rol: res?.data?.usuario?.rol, 
@@ -44,7 +48,7 @@ export default function Login() {
       else { notifyError('Usuario o contraseña incorrecto') }
     } catch (err) {
       if (err.code === 'ERR_BAD_RESPONSE') notifyError('Ha ocurrido un error')
-      throw err
+      console.log(err)
     }
   }
 

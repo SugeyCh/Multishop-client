@@ -13,21 +13,22 @@ import Admin              from './Admin'
 import Visor              from './Visor'
 import Colector           from './Colector'
 import NoAccess           from './Auth'
+import { loginUser }      from '@r/slicers/authsSlicer'
 
-export default function Products() {
+export default function Products({data}: any) {
   const [ redirect, setRedirect ] = useState(false)
-  const [ rol, setRol ] = useState('')
+  
   const { push } = useRouter()
 
   const dispatch = useDispatch()
 
   const userData = useSelector((state: RootState) => state.authData )
   const role = userData.rol
-  useEffect(() => { setRol(role) }, [rol])
 
   useEffect(() => { 
     if (redirect)  push('/') 
-    if (rol == '') push('/noaccess')  
+    if (role == '' && data.empty) push('/noaccess')  
+    else if (role == '' && !data.empty) dispatch(loginUser({username: data.name, rol: data.rol}))
   }, [redirect])
 
   const notifySucces = (msg: string) => { toast.success(msg) }
@@ -37,7 +38,7 @@ export default function Products() {
       dispatch(logoutUser())
       notifySucces('Cierre de sesión exitoso')
       setRedirect(true)
-    } catch (err) { throw err }
+    } catch (err) { console.log(err) }
   }
   
   return (
@@ -55,9 +56,9 @@ export default function Products() {
           </button>
         </header>
         {
-            rol == 'admin'    ? ( <Admin /> ) 
-          : rol == 'visor'    ? ( <Visor /> ) 
-          : rol == 'colector' ? ( <Colector /> ) 
+            role == 'admin'    ? ( <Admin /> ) 
+          : role == 'visor'    ? ( <Visor /> ) 
+          : role == 'colector' ? ( <Colector /> ) 
           : ( <NoAccess /> )
         }
         <footer className='end'>
@@ -68,3 +69,4 @@ export default function Products() {
     </>
   )
 }
+
