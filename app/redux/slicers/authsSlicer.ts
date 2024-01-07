@@ -3,6 +3,7 @@ import { Auth } from "@t/common"
 
 const initialState: Auth = { 
   username: '',
+  rol: '',
   token: '' 
 }
 

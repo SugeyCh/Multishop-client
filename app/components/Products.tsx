@@ -1,25 +1,34 @@
 'use client'
 
-import {  useEffect }     from 'react'
-import Image from 'next/image'
+import { useEffect }      from 'react'
+import { useRouter }      from 'next/router'
+import { useDispatch }    from 'react-redux'
+import { useSelector }    from 'react-redux'
+import { useState }       from 'react'
+import Image              from 'next/image'
 import toast, {Toaster}   from 'react-hot-toast'
-import { useRouter }    from 'next/router'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
 import type { RootState } from '@r/store'
-import { logoutUser } from '@r/slicers/authsSlicer'
-import { useState } from 'react'
+import { logoutUser }     from '@r/slicers/authsSlicer'
+import Admin              from './Admin'
+import Visor              from './Visor'
+import Colector           from './Colector'
+import NoAccess           from './Auth'
 
 export default function Products() {
-  const [redirect, setRedirect] = useState(false)
+  const [ redirect, setRedirect ] = useState(false)
+  const [ rol, setRol ] = useState('')
   const { push } = useRouter()
 
   const dispatch = useDispatch()
 
   const userData = useSelector((state: RootState) => state.authData )
-  console.log(userData)
+  const role = userData.rol
+  useEffect(() => { setRol(role) }, [rol])
 
-  useEffect(() => { if (redirect) push('/') }, [redirect])
+  useEffect(() => { 
+    if (redirect)  push('/') 
+    if (rol == '') push('/noaccess')  
+  }, [redirect])
 
   const notifySucces = (msg: string) => { toast.success(msg) }
 
@@ -34,9 +43,9 @@ export default function Products() {
   return (
     <>
       <div className='body'>
-      <Toaster position="top-right" reverseOrder={true} />
+        <Toaster position="top-right" reverseOrder={true} />
         <header className='header'>
-          <img className="logo" src='/img/multi2.jpg' alt="Logo de Multishop" />
+          <Image className="logo" src='/img/multi2.jpg' alt="Logo de Multishop" width={200} height={200} />
           <button 
             id='btn' 
             type="button" 
@@ -45,10 +54,16 @@ export default function Products() {
               Salir
           </button>
         </header>
-      <footer className='end'>
-        <span>Designed by</span>
-        <img className='footer' src='/img/multi2.jpg' alt="Logo de Multishop" />
-      </footer>
+        {
+            rol == 'admin'    ? ( <Admin /> ) 
+          : rol == 'visor'    ? ( <Visor /> ) 
+          : rol == 'colector' ? ( <Colector /> ) 
+          : ( <NoAccess /> )
+        }
+        <footer className='end'>
+          <span>Designed by</span>
+          <Image className='footer' src='/img/multi2.jpg' alt="Logo de Multishop" width={200} height={200} />
+        </footer>
       </div>
     </>
   )

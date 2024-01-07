@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import Image            from 'next/image'
 import { postLogin }    from '@api/Post'
 import { useEffect }    from 'react'
 import { useState }     from 'react'
@@ -34,7 +34,11 @@ export default function Login() {
       let res = await postLogin(newuser)
       if (res?.data && res?.data?.Status === 'Autenticación exitosa') {
         notifySucces('Inicio de Sesión exitoso')
-        dispatch(loginUser({ username: res?.data?.usuario?.nombre, token: 'abc123' }))
+        dispatch(loginUser({ 
+          username: res?.data?.usuario?.nombre, 
+          rol: res?.data?.usuario?.rol, 
+          token: 'abc123' 
+        }))
         setRedirect(true)
       }
       else { notifyError('Usuario o contraseña incorrecto') }
